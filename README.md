@@ -1,5 +1,5 @@
 <h1>Projeto de Calcular Salário | Vendas | Benefícios para Empresa em JAVA</h1>
-<p> Projeto de POO <strong>Proposto pela Sinerji</strong na candidatura de uma vaga de estágio para Desenvolvedor Java<br>
+<p> Projeto de Programação Orientada a Objetos (POO) <strong>Proposto pela Sinerji</strong na candidatura de uma vaga de estágio para Desenvolvedor Java<br>
 
 <h2>🎯 Objetivo do Projeto</h2>
 <p>Conhecer os principais conceitos de Logíca de Programação e <strong>Programação Orientada Objetos</strong>.
