@@ -12,7 +12,7 @@ Para isso, foi resolvido o problema Proposto</p>
 - Um método que receba uma lista de funcionários, mês e ano e retorne o total pago somente em salários no mês.
 
 - Um método que receba uma lista somente com os funcionários que recebem benefícios, mês e ano e retorne o total pago em benefícios no mês.
-• Um método que receba uma lista de funcionários, mês e ano e retorne o que recebeu o valor mais alto no mês.
+- Um método que receba uma lista de funcionários, mês e ano e retorne o que recebeu o valor mais alto no mês.
 
 - Um método que receba uma lista somente com os funcionários que recebem benefícios, mês e ano e retorne o nome do funcionário que recebeu o valor mais alto em benefícios no mês.
 
