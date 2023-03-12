@@ -1,4 +1,4 @@
-<h1>Projeto de Calcular Salário | Vendas | Benefícios para Empresa</h1>
+<h1>Projeto de Calcular Salário | Vendas | Benefícios para Empresa em JAVA</h1>
 <p> Projeto de POO <strong>Proposto pela Sinerji</strong na candidatura de uma vaga de estágio para Desenvolvedor Java<br>
 
 <h2>🎯 Objetivo do Projeto</h2>
