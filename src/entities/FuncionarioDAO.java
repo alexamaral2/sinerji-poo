@@ -49,48 +49,72 @@ public class FuncionarioDAO {
 	public void calcularMaiorBeneficioEFuncionario(List<Funcionario> funcionarios, int mes, int ano) {
 		float maiorBeneficio = 0;
 		String nomeFuncionario = "";
-
-		for (Funcionario funcionario : funcionarios) {
-		    int posicaoBarra = funcionario.mesAnoContratacao().indexOf("/");
-		    int mesInicio = Integer.parseInt(funcionario.mesAnoContratacao().substring(0, posicaoBarra));
-		    int anoInicio = Integer.parseInt(funcionario.mesAnoContratacao().substring(posicaoBarra + 1));
-
-		    if (ano < anoInicio || (ano == anoInicio && mes < mesInicio)) {
-		        continue; // o funcionário não trabalhou nesse período
-		    }
-
-		    float adicionalAnoServico = funcionario.getCargo().getAdicionalAnoServico() * (ano - anoInicio);
-		    float salarioBase = funcionario.getCargo().getSalario() + adicionalAnoServico;
-
-		    float porcentagemBeneficio = funcionario.getCargo().getPorcentagemBeneficio();
-
-		    if (funcionario.cargo.nomeCargo.equals("Vendedor")) {
-		        for (Venda venda : VendaDAO.getListaVenda()) {
-		            int posicaoBarraVenda = venda.getMesAnoVenda().indexOf("/");
-		            int mesVenda = Integer.parseInt(venda.getMesAnoVenda().substring(0, posicaoBarraVenda));
-		            int anoVenda = Integer.parseInt(venda.getMesAnoVenda().substring(posicaoBarraVenda + 1));
-
-		            if (mesVenda == mes && anoVenda == ano && venda.getFuncionario().nome.equals(funcionario.nome)) {
-		                float valorVenda = venda.getValorVenda();
-		                float beneficio = valorVenda * porcentagemBeneficio / 100;
-
-		                if (beneficio > maiorBeneficio) {
-		                    maiorBeneficio= beneficio;
-		                    nomeFuncionario = funcionario.getNomeFuncionario();
+		
+		float valorTotal = 0;
+	    float valorBeneficio = 0;
+	    float valorTotalVendedor = 0;
+	    float valorTotalVendedorBeneficio = 0;
+	    
+	    for (Funcionario funcionario : funcionarios) {
+	        String cargo = (String) funcionario.getCargo().nomeCargo;
+	    	int posicaoBarra = funcionario.mesAnoContratacao().indexOf("/");
+	        int mesInicio = Integer.parseInt(funcionario.mesAnoContratacao().substring(0, posicaoBarra));
+	        int anoInicio = Integer.parseInt(funcionario.mesAnoContratacao().substring(posicaoBarra + 1));
+	        
+	        if (cargo == "Vendedor" || cargo == "Secretario") {
+	        
+		        if (ano < anoInicio || (ano == anoInicio && mes < mesInicio)) {
+		            continue; // o funcionário não trabalhou nesse período
+		        }
+		        
+		        float porcentagemBeneficio = funcionario.getCargo().getPorcentagemBeneficio();
+	
+		        if (funcionario.cargo.nomeCargo.equals("Vendedor")) {
+		            for (Venda venda : VendaDAO.getListaVenda()) {
+		                int posicaoBarraVenda = venda.getMesAnoVenda().indexOf("/");
+		                int mesVenda = Integer.parseInt(venda.getMesAnoVenda().substring(0, posicaoBarraVenda));
+		                int anoVenda = Integer.parseInt(venda.getMesAnoVenda().substring(posicaoBarraVenda + 1));
+	
+		                if (mesVenda == mes && anoVenda == ano && venda.getFuncionario().nome.equals(funcionario.nome)) {
+		                    float valorVenda = venda.getValorVenda();
+		                    float beneficio = valorVenda * porcentagemBeneficio / 100;
+		                    
+		                    if (beneficio > maiorBeneficio){
+		                    	maiorBeneficio= beneficio;
+			                    nomeFuncionario = funcionario.getNomeFuncionario();
+		                    	
+		                    }
 		                }
 		            }
-		        }
-		    } else {
-		        float beneficio = salarioBase * porcentagemBeneficio / 100;
-
-		        if (beneficio > maiorBeneficio) {
-		            maiorBeneficio = beneficio;
-		            nomeFuncionario = funcionario.getNomeFuncionario();
+		        } else {
+		        	if (mes >= mesInicio){
+			        	float adicionalAnoServico = funcionario.getCargo().getAdicionalAnoServico() * (ano - anoInicio);
+			            float salarioBase = funcionario.getCargo().getSalario() + adicionalAnoServico;
+			        	float beneficio = salarioBase * porcentagemBeneficio / 100;	
+			        	
+			        	 if (beneficio > maiorBeneficio){
+		                    	maiorBeneficio= beneficio;
+			                    nomeFuncionario = funcionario.getNomeFuncionario();
+		                    	
+		                    }
+			
+		        	}
+		        	else {
+		        		float anosTrabalhados = ano - anoInicio;
+		        		float adicionalAnoServico = funcionario.getCargo().getAdicionalAnoServico() * (anosTrabalhados -1);
+			            float salarioBase = funcionario.getCargo().getSalario() + adicionalAnoServico;
+			        	float beneficio = salarioBase * porcentagemBeneficio / 100;
+			        	
+			        	 if (beneficio > maiorBeneficio){
+		                    	maiorBeneficio= beneficio;
+			                    nomeFuncionario = funcionario.getNomeFuncionario();
+		                    	
+		                    }
+		        	}
 		        }
 		    }
-		}
-
-		System.out.printf("\nO funcionário com maior beneficio é %s, com um ganho de beneficio de R$ %.2f\n", nomeFuncionario, maiorBeneficio);
+	    }
+	    System.out.printf("\nO funcionário com maior beneficio é %s, com um ganho de beneficio de R$ %.2f\n", nomeFuncionario, maiorBeneficio);
 	}
 	
 	
@@ -180,11 +204,21 @@ public class FuncionarioDAO {
 		                }
 		            }
 		        } else {
-		        	float adicionalAnoServico = funcionario.getCargo().getAdicionalAnoServico() * (ano - anoInicio);
-		            float salarioBase = funcionario.getCargo().getSalario() + adicionalAnoServico;
-		        	float beneficio = salarioBase * porcentagemBeneficio / 100;
-		        	System.out.print(funcionario.nome+ "\n");
-		            valorBeneficio += beneficio;
+		        	if (mes >= mesInicio){
+			        	float adicionalAnoServico = funcionario.getCargo().getAdicionalAnoServico() * (ano - anoInicio);
+			            float salarioBase = funcionario.getCargo().getSalario() + adicionalAnoServico;
+			        	float beneficio = salarioBase * porcentagemBeneficio / 100;
+			        	System.out.print(funcionario.nome+ "\n");
+			            valorBeneficio += beneficio;
+		        	}
+		        	else {
+		        		float anosTrabalhados = ano - anoInicio;
+		        		float adicionalAnoServico = funcionario.getCargo().getAdicionalAnoServico() * (anosTrabalhados -1);
+			            float salarioBase = funcionario.getCargo().getSalario() + adicionalAnoServico;
+			        	float beneficio = salarioBase * porcentagemBeneficio / 100;
+			        	System.out.print(funcionario.nome+ "\n");
+			            valorBeneficio += beneficio;
+		        	}
 		        }
 		    }
 	    }
